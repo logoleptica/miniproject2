@@ -1,4 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using CC = System.ConsoleColor;
+
 class Program
 {
     public static List<Product> productList = new List<Product>();
@@ -15,15 +16,20 @@ class Program
     }
     static void Greeting()
     {
-        Console.WriteLine("Welcome to the Product List");
+        Program.Print("============================");
+        Program.Print("Welcome to the Product List", CC.Magenta);
+        Program.Print("============================");
+
     }
     static void HandleInput()
     {
-        Console.WriteLine("Press 'A' to Add");
-        Console.WriteLine("Press 'D' to Display");
-        Console.WriteLine("Press 'S' to Search");
-        Console.WriteLine("Press 'Q' to Quit");
-        Console.WriteLine("------------------");
+        Program.Print("------------------");
+        Program.Print("Press 'A' to Add", CC.DarkYellow);
+        Program.Print("Press 'D' to Display", CC.DarkYellow);
+        Program.Print("Press 'S' to Search", CC.DarkYellow);
+        Program.Print("Press 'Q' to Quit", CC.DarkYellow);
+        Program.Print("------------------");
+        Program.Print("Enter your choice:", CC.DarkGreen);
         string input = Console.ReadLine();
         switch (input.ToUpper())
         {
@@ -40,9 +46,15 @@ class Program
                 Environment.Exit(0);
                 break;
             default:
-                Console.WriteLine("Invalid Input. Please try again.");
+                Program.Print("Invalid Input. Please try again.", CC.Red);
+
                 break;
         }
+    }
+    public static void Print(string input, CC fgColor = CC.White)
+    {
+        Console.ForegroundColor = fgColor;
+        Console.WriteLine("  " + input);
     }
 }
 
@@ -67,9 +79,9 @@ class Product
         {
             Console.ForegroundColor = ConsoleColor.DarkBlue;
 
-            Console.WriteLine("Enter Input Or To Quit Press 'Q': ");
+            Program.Print("Enter Input Or To Quit Press 'Q': ");
             Console.ResetColor();
-            Console.WriteLine("===================");
+            Program.Print("===================");
             Console.Write("Enter category: ");
 
             string category = Console.ReadLine();
@@ -87,8 +99,7 @@ class Product
                 if (decimal.TryParse(Console.ReadLine(), out price) && price >= 0)
                     break;
 
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid price. Please enter a non-negative number.");
+                Program.Print("Invalid price. Please enter a non-negative number.", CC.Red);
                 Console.ResetColor();
 
             }
@@ -98,15 +109,11 @@ class Product
             {
                 Product product = new Product(category, name, price);
                 productList.Add(product);
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Product added successfully.");
+                Program.Print("Product added successfully.", CC.Green);
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Error adding product: {ex.Message}");
-                Console.ResetColor();
+                Program.Print($"Error adding product: {ex.Message}");
             }
         }
     }
@@ -115,21 +122,21 @@ class Product
     {
 
         var sortedProducts = productsList.OrderBy(p => p.Price).ToList();
-        Console.WriteLine("\nProduct List (Sorted by Price):");
-        Console.WriteLine("-------------------------------");
+        Program.Print("\nProduct List (Sorted by Price):");
+        Program.Print("-------------------------------");
         foreach (var product in sortedProducts)
         {
-            Console.WriteLine($"Category: {product.Category}, Name: {product.Name}, Price: ${product.Price}");
+            Program.Print($"Category: {product.Category}, Name: {product.Name}, Price: ${product.Price}");
         }
-        Console.WriteLine("-------------------------------");
-        Console.WriteLine($"Total Price: ${GetTotalPrice(productsList)}");
+        Program.Print("-------------------------------");
+        Program.Print($"Total Price: ${GetTotalPrice(productsList)}");
 
 
     }
     public static void SearchProducts(List<Product> productsList)
 
     {
-        Console.WriteLine("\nEnter search term:");
+        Program.Print("\nEnter search term: ", CC.DarkYellow);
         string searchTerm = Console.ReadLine();
         DisplayProducts(productsList.Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                                    p.Category.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))

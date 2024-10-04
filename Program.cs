@@ -34,7 +34,6 @@ class Program
                 Product.DisplayProducts(productList);
                 break;
             case "S":
-                System.Console.WriteLine("Running searchproducts");
                 Product.SearchProducts(productList);
                 break;
             case "Q":
